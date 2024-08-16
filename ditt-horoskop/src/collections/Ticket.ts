@@ -34,7 +34,7 @@ export const Ticket: CollectionConfig = {
     {
       name: 'Done',
       type: 'checkbox',
-      label: 'Click me to see fanciness',
+      label: 'Done',
       defaultValue: false,
       required: true,
     },
