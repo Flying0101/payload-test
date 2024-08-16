@@ -36,7 +36,6 @@ export const Ticket: CollectionConfig = {
       type: 'checkbox',
       label: 'Done',
       defaultValue: false,
-      required: true,
     },
   ],
   upload: true,
