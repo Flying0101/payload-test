@@ -38,5 +38,4 @@ export const Ticket: CollectionConfig = {
       defaultValue: false,
     },
   ],
-  upload: true,
 }
