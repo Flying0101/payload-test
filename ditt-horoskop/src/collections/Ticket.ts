@@ -14,24 +14,29 @@ export const Ticket: CollectionConfig = {
     {
       name: 'Main description',
       type: 'text',
+      required: true,
     },
     {
       name: 'Estimate',
       type: 'text',
+      required: true,
     },
     {
       name: 'State',
       type: 'text',
+      required: true,
     },
     {
       name: 'Note',
       type: 'text',
+      required: true,
     },
     {
       name: 'Done',
       type: 'checkbox',
       label: 'Click me to see fanciness',
       defaultValue: false,
+      required: true,
     },
   ],
   upload: true,
