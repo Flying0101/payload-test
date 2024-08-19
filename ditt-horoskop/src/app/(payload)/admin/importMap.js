@@ -1,5 +1,5 @@
-import { emptyComponent as emptyComponent_0 } from '@payloadcms/ui/shared'
+import { default as default_0 } from 'src/components/admin/DoneCell'
 
 export const importMap = {
-  // '@payloadcms/ui/shared#emptyComponent': emptyComponent_0,
+  "src/components/admin/DoneCell#default": default_0
 }
