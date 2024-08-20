@@ -1,3 +1,4 @@
+import TicketsView from '@/components/admin/TicketsView'
 import type { CollectionConfig } from 'payload'
 
 export const Ticket: CollectionConfig = {
@@ -17,6 +18,13 @@ export const Ticket: CollectionConfig = {
       required: true,
     },
     {
+      name: 'Done',
+      type: 'checkbox',
+      label: 'Done',
+      defaultValue: false,
+      admin: { components: { Cell: 'src/components/admin/DoneCell' } },
+    },
+    {
       name: 'Estimate',
       type: 'text',
       required: true,
@@ -30,12 +38,6 @@ export const Ticket: CollectionConfig = {
       name: 'Note',
       type: 'text',
       required: true,
-    },
-    {
-      name: 'Done',
-      type: 'checkbox',
-      label: 'Done',
-      defaultValue: false,
     },
   ],
 }
