@@ -32,6 +32,11 @@ export default buildConfig({
     },
   }),
   sharp,
+  cors: ['http://localhost:3000'],
+  csrf: [
+    // whitelist of domains to allow cookie auth from
+    'http://localhost:3000',
+  ],
   plugins: [
     // storage-adapter-placeholder
   ],
