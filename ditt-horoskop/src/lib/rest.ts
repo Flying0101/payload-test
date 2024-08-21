@@ -1,8 +1,10 @@
+import { User } from '@/payload-types'
+
 export const rest = async (
   url: string,
   args?: any, // eslint-disable-line @typescript-eslint/no-explicit-any
   options?: RequestInit,
-): Promise<{ id: string } | null | undefined> => {
+): Promise<User | null> => {
   const method = options?.method || 'POST'
 
   try {
@@ -24,8 +26,10 @@ export const rest = async (
     }
 
     if (res.ok) {
-      return user
+      return user || null
     }
+
+    return null
   } catch (e: unknown) {
     throw new Error(e as string)
   }

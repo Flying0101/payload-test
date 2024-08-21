@@ -7,6 +7,8 @@ type LayoutProps = {
 }
 
 import './globals.css'
+import { AuthProvider } from '@/providers/auth'
+import Header from '@/components/ui/header'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -16,9 +18,12 @@ const fontSans = FontSans({
 const Layout = ({ children }: LayoutProps) => {
   return (
     <html>
-      <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
-        {children}
-      </body>
+      <AuthProvider>
+        <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
+          <Header />
+          {children}
+        </body>
+      </AuthProvider>
     </html>
   )
 }
