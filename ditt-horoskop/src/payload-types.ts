@@ -14,6 +14,7 @@ export interface Config {
     users: User;
     media: Media;
     Ticket: Ticket;
+    signs: Sign;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
@@ -50,6 +51,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  sign?: (number | null) | Sign;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -60,6 +62,19 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "signs".
+ */
+export interface Sign {
+  id: number;
+  Title: string;
+  Description: string;
+  'Small Icon'?: number | Media | null;
+  Image?: number | Media | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
