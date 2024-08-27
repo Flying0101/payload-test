@@ -11,8 +11,6 @@ export async function middleware(request: NextRequest) {
   if (url.pathname === '/login') {
     const { user, token } = await getMe()
 
-    console.log(user, token)
-
     if (token) {
       url.pathname = `/user/${user.id}`
       return NextResponse.redirect(url)
