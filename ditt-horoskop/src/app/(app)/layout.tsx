@@ -21,7 +21,9 @@ const Layout = ({ children }: LayoutProps) => {
       <AuthProvider>
         <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
           <Header />
-          {children}
+          <main className={'w-full flex flex-col justify-center items-center pb-4'}>
+            {children}
+          </main>
         </body>
       </AuthProvider>
     </html>
