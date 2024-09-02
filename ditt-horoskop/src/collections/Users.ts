@@ -6,5 +6,9 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
   },
   auth: true,
-  fields: [{ name: 'sign', type: 'relationship', relationTo: 'signs' }],
+  fields: [
+    { name: 'name', type: 'text' },
+    { name: 'description', type: 'text' },
+    { name: 'sign', type: 'relationship', relationTo: 'signs' },
+  ],
 }
