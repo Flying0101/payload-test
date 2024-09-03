@@ -95,11 +95,11 @@ export function SignsForm({
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>
+        <CardTitle className="flex justify-center">
           <TypewriterEffectSmooth words={getSelectedSign()} />
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex justify-center">
         <Circle radius={250}>
           {signs.map(({ id, Title, 'Small Icon': icon, Description }) => (
             <SignIcon
