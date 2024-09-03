@@ -14,22 +14,20 @@ export type ResetPassword = (args: {
 
 export type ForgotPassword = (args: { email: string }) => Promise<User | null>
 
-export type Create = (args: {
-  email: string
-  password: string
-  firstName: string
-  lastName: string
-}) => Promise<User | null>
+export type Create = (args: { email: string; password: string }) => Promise<User | null>
 
 export type Login = (args: { email: string; password: string }) => Promise<User | null>
 
 export type Logout = () => Promise<void>
 
+export type Update = (args: Partial<User>) => User | null
+
 export interface AuthContext {
   user?: User | null
-  setUser: (user: User | null) => void
+  setUser: React.Dispatch<React.SetStateAction<User | null>>
   logout: Logout
   login: Login
+  update: Update
   create: Create
   resetPassword: ResetPassword
   forgotPassword: ForgotPassword
@@ -63,6 +61,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await rest(`${process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'}/api/users/logout`)
     setUser(null)
     router.refresh()
+  }, [])
+
+  const update = useCallback<Update>((args) => {
+    setUser((prevUser) => (prevUser ? { ...prevUser, ...args } : null))
+    return user
   }, [])
 
   useEffect(() => {
@@ -105,6 +108,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser,
         login,
         logout,
+        update,
         create,
         resetPassword,
         forgotPassword,
