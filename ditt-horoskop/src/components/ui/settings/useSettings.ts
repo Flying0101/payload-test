@@ -24,6 +24,8 @@ export function useSettingsForm(initialTab: string) {
         description: !!(description && description.length),
         sign: !!sign,
       })
+
+      setStep(!!sign ? 4 : !!description?.length ? 3 : !!name ? 2 : 1)
     }
   }, [auth.user])
 
@@ -31,7 +33,7 @@ export function useSettingsForm(initialTab: string) {
     const tab = searchParams.get('t')
     if (tab && tabs.includes(tab)) {
       const index = tabs.indexOf(tab)
-      setStep(index + 1)
+      // setStep(index + 1)
       setActiveTab(tab)
     }
   }, [searchParams, tabs])
@@ -45,7 +47,7 @@ export function useSettingsForm(initialTab: string) {
 
   const nextStep = () => {
     const newStep = Math.min(tabs.length, step + 1)
-    setStep(newStep)
+    setStep(Math.min(newStep, step))
     handleTabChange(tabs[newStep - 1])
   }
 
@@ -54,7 +56,6 @@ export function useSettingsForm(initialTab: string) {
 
     // const payload = await getPayload()
     // payload.update({ collection: 'users',where:  })
-    console.log(formData[key])
 
     const res = await rest(
       `${process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'}/api/users/${auth.user?.id || ''}`,
@@ -67,6 +68,8 @@ export function useSettingsForm(initialTab: string) {
         },
       },
     )
+
+    auth.update({ [key]: value })
   }
 
   const isStepCompleted = (step: number) => !!completedSteps[step]
@@ -80,6 +83,7 @@ export function useSettingsForm(initialTab: string) {
     handleTabChange,
     nextStep,
     formData,
+    step,
     updateFormData,
     isStepCompleted,
     setStepCompleted,
