@@ -14,7 +14,7 @@ import {
 } from './form'
 import { Input } from './input'
 import { Button } from './button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './card'
 import { cn } from '@/lib/utils'
 import { rest } from '@/lib/rest'
 import { useRouter } from 'next/navigation'
@@ -199,6 +199,9 @@ export function LoginCard({ className, ...props }: CardProps) {
         )}
         <LoginForm setShowAlert={setShowAlert} />
       </CardContent>
+      <CardFooter>
+        <Link href="/signup">Create account</Link>
+      </CardFooter>
     </Card>
   )
 }
