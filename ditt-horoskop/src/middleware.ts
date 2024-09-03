@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getMe } from './lib/getMe'
+import { missingSettings } from './lib/userUtils'
 
 // const protectedRoutes = ['/user', '/profile', '/settings']
 
@@ -30,6 +31,11 @@ export async function middleware(request: NextRequest) {
 
     if (String(user.id) !== idToAccess) {
       url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+
+    if (missingSettings(user) && url.pathname !== `/user/${user.id}/settings`) {
+      url.pathname = `/user/${user.id}/settings`
       return NextResponse.redirect(url)
     }
   }
