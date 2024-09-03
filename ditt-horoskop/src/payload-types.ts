@@ -51,6 +51,8 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  name?: string | null;
+  description?: string | null;
   sign?: (number | null) | Sign;
   updatedAt: string;
   createdAt: string;
