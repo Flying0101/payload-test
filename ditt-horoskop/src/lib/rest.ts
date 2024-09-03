@@ -10,7 +10,7 @@ export const rest = async (
   try {
     const res = await fetch(url, {
       method,
-      ...(method === 'POST' ? { body: JSON.stringify(args) } : {}),
+      ...(method === 'POST' || method === 'PATCH' ? { body: JSON.stringify(args) } : {}),
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
@@ -19,14 +19,14 @@ export const rest = async (
       ...options,
     })
 
-    const { errors, user } = await res.json()
+    const { errors, user, ...data } = await res.json()
 
     if (errors) {
       throw new Error(errors[0].message)
     }
 
     if (res.ok) {
-      return user || null
+      return user || data.doc || null
     }
 
     return null
