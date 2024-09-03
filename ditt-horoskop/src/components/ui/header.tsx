@@ -15,6 +15,7 @@ import {
 import { DropdownMenuItem, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { missingSettings } from '@/lib/userUtils'
 
 function Header() {
   const { user, logout } = useAuth()
@@ -30,7 +31,7 @@ function Header() {
 
           {/* Buttons Section */}
           <div className="hidden md:flex space-x-4">
-            <Button>Contact</Button>
+            <SignUpButton user={user} />
             <UserMenu user={user} logout={logout} />
             <LoginButton user={user} />
           </div>
@@ -41,16 +42,19 @@ function Header() {
 }
 
 function UserMenu({ user, logout }: Pick<AuthContext, 'user' | 'logout'>) {
-  if (!user) return null
+  console.log('rerender header', user)
 
-  const { email, id } = user
+  if (!user?.email) return null
+  if (missingSettings(user)) return null
+
+  const { name, email, id } = user
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
         <Avatar>
           <AvatarImage src="llogo.png" />
-          <AvatarFallback>{user.email.at(0)}</AvatarFallback>
+          <AvatarFallback>{name!.at(0)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
@@ -94,11 +98,21 @@ function UserMenu({ user, logout }: Pick<AuthContext, 'user' | 'logout'>) {
 }
 
 function LoginButton({ user }: { user: User | null | undefined }) {
-  if (user) return null
+  if (user?.email) return null
 
   return (
     <Link href="/login" className={buttonVariants({ variant: 'default' })}>
       Log in
+    </Link>
+  )
+}
+
+function SignUpButton({ user }: { user: User | null | undefined }) {
+  if (user?.email) return null
+
+  return (
+    <Link href="/signup" className={buttonVariants({ variant: 'default' })}>
+      Sign up
     </Link>
   )
 }
