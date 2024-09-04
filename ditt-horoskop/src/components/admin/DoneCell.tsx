@@ -14,7 +14,7 @@ const DoneCell: React.FC<CellComponentProps> = () => {
         parentTr.style.backgroundColor = 'green'
       }
     }
-  }, [])
+  }, [context.cellData])
 
   return <div ref={childRef}>{context.cellData ? 'Yes' : 'No'}</div>
 }

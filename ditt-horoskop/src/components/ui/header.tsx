@@ -2,7 +2,7 @@
 
 import { AuthContext, useAuth } from '@/providers/auth'
 import { Avatar, AvatarFallback, AvatarImage } from './avatar'
-import { Button, buttonVariants } from './button'
+import { buttonVariants } from './button'
 import { User } from '@/payload-types'
 import {
   DropdownMenu,
@@ -13,9 +13,9 @@ import {
   DropdownMenuShortcut,
 } from './dropdown-menu'
 import { DropdownMenuItem, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { missingSettings } from '@/lib/userUtils'
+import Image from 'next/image'
 
 function Header() {
   const { user, logout } = useAuth()
@@ -26,7 +26,7 @@ function Header() {
         <div className="flex justify-between items-center py-6">
           {/* Logo Section */}
           <Link href="/" className="flex items-center flex-shrink-0">
-            <img className="h-20 w-20 mr-2" src="/logo.png" alt="Logo" />
+            <Image className="h-20 w-20 mr-2" src="/logo.png" alt="Logo" />
           </Link>
 
           {/* Buttons Section */}

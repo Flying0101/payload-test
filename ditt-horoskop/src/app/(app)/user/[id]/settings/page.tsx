@@ -1,4 +1,3 @@
-import { SettingsForm } from '@/components/ui/settings-form'
 import { Settings } from '@/components/ui/settings/settings'
 import { getMe } from '@/lib/getMe'
 import { getPayload } from '@/lib/payload'

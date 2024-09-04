@@ -1,4 +1,3 @@
-import TicketsView from '@/components/admin/TicketsView'
 import type { CollectionConfig } from 'payload'
 
 export const Ticket: CollectionConfig = {

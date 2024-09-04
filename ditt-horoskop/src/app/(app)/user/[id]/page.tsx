@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const payload = await getPayload()
   const { sign } = await payload.findByID({ id: params.id, collection: 'users' })
 
-  if (!sign) {
+  if (!sign || typeof sign === 'number') {
     return (
       <Link href="/settings" className={buttonVariants({ variant: 'outline' })}>
         Start jour yourney
