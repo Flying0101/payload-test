@@ -11,16 +11,27 @@ interface SignIconProps {
   description: string
   state: 'no' | 'chosen' | 'confirmed'
   onClick: () => void
+  setHoverImage: (state: false | Media) => void
 }
 
-const SignIcon: React.FC<SignIconProps> = ({ icon, name, description, state, onClick }) => {
+const SignIcon: React.FC<SignIconProps> = ({
+  icon,
+  name,
+  description,
+  state,
+  onClick,
+  setHoverImage,
+}) => {
   if (typeof icon === 'number') return null
+  if (!icon) return null
 
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
         <Avatar
           onClick={onClick}
+          onMouseEnter={() => setHoverImage(icon)}
+          onMouseLeave={() => setHoverImage(false)}
           className={cn(
             state === 'chosen'
               ? 'bg-green-300'

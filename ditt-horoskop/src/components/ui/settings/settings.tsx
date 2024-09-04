@@ -3,13 +3,20 @@
 import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../tabs'
 import { CheckIcon } from 'lucide-react'
-import { useSettingsForm } from './useSettings'
+import { TabKey, useSettingsForm } from './useSettings'
 import { NameForm } from './nameForm'
 import { DescriptionForm } from './descriptionForm'
 import { SignsForm } from './signsForm'
 import Summary from './summary'
 
-export function Settings({ initialTab, className, signs, ...props }: any) {
+type SettingsProps = {
+  initialTab?: string
+  className?: string
+  signs?: any
+  [key: string]: any
+}
+
+export function Settings({ initialTab, className, signs, ...props }: SettingsProps) {
   const {
     activeTab,
     handleTabChange,
@@ -19,7 +26,7 @@ export function Settings({ initialTab, className, signs, ...props }: any) {
     updateFormData,
     isStepCompleted,
     setStepCompleted,
-  } = useSettingsForm(initialTab)
+  } = useSettingsForm(initialTab || 'name')
 
   const forms = [
     { value: 'name', component: NameForm },
@@ -42,7 +49,6 @@ export function Settings({ initialTab, className, signs, ...props }: any) {
             updateFormData={updateFormData}
             nextStep={nextStep}
             setStepCompleted={setStepCompleted}
-            isStepCompleted={isStepCompleted}
             signs={signs}
             {...props}
           />
@@ -63,7 +69,13 @@ export function Settings({ initialTab, className, signs, ...props }: any) {
   )
 }
 
-export function VisibleTabs({ forms, step, isStepCompleted }: any) {
+type TabProps = {
+  forms: { value: string }[]
+  step: number
+  isStepCompleted: (step: TabKey) => boolean
+}
+
+export function VisibleTabs({ forms, step, isStepCompleted }: TabProps) {
   if (step < 2) return null
 
   const tabs = forms.slice(0, step).map(({ value }, index) => (
@@ -71,10 +83,12 @@ export function VisibleTabs({ forms, step, isStepCompleted }: any) {
       key={`tab${index + 1}`}
       value={value}
       className={
-        isStepCompleted(value) ? 'bg-success text-success-foreground' : 'border-destructive'
+        isStepCompleted(value as TabKey)
+          ? 'bg-success text-success-foreground'
+          : 'border-destructive'
       }
     >
-      {isStepCompleted(value) && <CheckIcon className="h-6 w-6 pr-2" />}
+      {isStepCompleted(value as TabKey) && <CheckIcon className="h-6 w-6 pr-2" />}
       {value.charAt(0).toUpperCase() + value.slice(1)}
     </TabsTrigger>
   ))
@@ -82,15 +96,7 @@ export function VisibleTabs({ forms, step, isStepCompleted }: any) {
   return (
     <TabsList className="grid w-full grid-cols-4 space-x-2">
       {tabs}
-      {step === 4 && (
-        <TabsTrigger
-          value="summary"
-          className={isStepCompleted('summary') ? 'bg-success text-success-foreground' : ''}
-        >
-          {isStepCompleted('summary') && <CheckIcon className="h-6 w-6 pr-2" />}
-          Summary
-        </TabsTrigger>
-      )}{' '}
+      {step === 4 && <TabsTrigger value="summary">Summary</TabsTrigger>}
     </TabsList>
   )
 }

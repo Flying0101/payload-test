@@ -1,22 +1,16 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Form, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
-import { Input } from '../input'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../card'
+import { Card, CardContent, CardHeader, CardTitle } from '../card'
 import { TypewriterEffectSmooth } from '../typewriter-effect'
-import { Sign } from '@/payload-types'
+import { Media, Sign } from '@/payload-types'
 import SignIcon from '../signIcon'
-import Circle from '../circle'
+import { Circle, CircleMiddle } from '../circle'
+import Image from 'next/image'
 
 export function SignsForm({
   formData,
   updateFormData,
-  className,
   signs,
   nextStep,
   setStepCompleted,
@@ -26,9 +20,9 @@ export function SignsForm({
   formData: any
   updateFormData: any
   setStepCompleted: any
-  className: string
 }) {
   const [selectedSign, setSelectedSign] = useState<number | null>(null)
+  const [hoveredSign, setHoveredSign] = useState<Media | false>(false)
   const [confirmedSign, setConfirmedSign] = useState<number | null>(null)
 
   useEffect(() => {
@@ -101,6 +95,11 @@ export function SignsForm({
       </CardHeader>
       <CardContent className="flex justify-center">
         <Circle radius={250}>
+          {!!hoveredSign && (
+            <CircleMiddle>
+              <Image src={hoveredSign.url || ''} alt="chosen sign icon" width={100} height={100} />
+            </CircleMiddle>
+          )}
           {signs.map(({ id, Title, 'Small Icon': icon, Description }) => (
             <SignIcon
               icon={icon}
@@ -108,6 +107,9 @@ export function SignsForm({
               key={id}
               description={Description}
               state={getSignState(id)}
+              setHoverImage={(v: false | Media) => {
+                setHoveredSign(v)
+              }}
               onClick={() => handleSignClick(id)}
             />
           ))}

@@ -13,7 +13,6 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form'
-import { Input } from '../input'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../card'
 import { TypewriterEffectSmooth } from '../typewriter-effect'
@@ -41,11 +40,11 @@ export function DescriptionForm({ formData, updateFormData, nextStep, setStepCom
   useEffect(() => {
     if (!formData.description?.length) return
     form.setValue('description', formData.description)
-  }, [formData.description])
+  }, [formData.description, form])
 
   React.useEffect(() => {
     form.setFocus('description')
-  }, [form.setFocus])
+  }, [form])
 
   function onSubmit(data: any) {
     updateFormData('description', data.description)

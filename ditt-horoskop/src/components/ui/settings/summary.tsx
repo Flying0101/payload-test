@@ -33,7 +33,7 @@ export default function Summary({ className, formData, isStepCompleted }: any) {
       </CardHeader>
       <CardContent>
         {isCompleted ? (
-          <Link href="daily">Click here to read today's Horoscope</Link>
+          <Link href="daily">Click here to read today`&apos;`s Horoscope</Link>
         ) : (
           <ul>
             <li>

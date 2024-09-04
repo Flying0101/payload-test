@@ -21,7 +21,11 @@ const NameSchema = z.object({
   name: z.string().min(1).max(160),
 })
 
-export function NameForm({ formData, updateFormData, nextStep, setStepCompleted }: any) {
+type NameFormProps = any //{
+// formData, updateFormData, nextStep, setStepCompleted
+// }
+
+export function NameForm({ formData, updateFormData, nextStep, setStepCompleted }: NameFormProps) {
   const form = useForm({
     resolver: zodResolver(NameSchema),
     defaultValues: { name: '' },
@@ -30,11 +34,11 @@ export function NameForm({ formData, updateFormData, nextStep, setStepCompleted 
   useEffect(() => {
     if (!formData.name?.length) return
     form.setValue('name', formData.name)
-  }, [formData.name])
+  }, [formData.name, form])
 
   React.useEffect(() => {
     form.setFocus('name')
-  }, [form.setFocus])
+  }, [form])
 
   const watchName = form.watch('name')
 
@@ -45,7 +49,7 @@ export function NameForm({ formData, updateFormData, nextStep, setStepCompleted 
       console.log('name changed')
       setStepCompleted('name', false)
     }
-  }, [watchName])
+  }, [watchName, formData.name, setStepCompleted])
 
   function onSubmit(data: any) {
     updateFormData('name', data.name)

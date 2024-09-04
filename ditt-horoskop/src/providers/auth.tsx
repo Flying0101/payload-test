@@ -61,12 +61,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await rest(`${process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3000'}/api/users/logout`)
     setUser(null)
     router.refresh()
-  }, [])
+  }, [router])
 
-  const update = useCallback<Update>((args) => {
-    setUser((prevUser) => (prevUser ? { ...prevUser, ...args } : null))
-    return user
-  }, [])
+  const update = useCallback<Update>(
+    (args) => {
+      setUser((prevUser) => (prevUser ? { ...prevUser, ...args } : null))
+      return user
+    },
+    [user],
+  )
 
   useEffect(() => {
     const fetchMe = async () => {

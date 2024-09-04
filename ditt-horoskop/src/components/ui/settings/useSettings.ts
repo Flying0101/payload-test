@@ -1,24 +1,28 @@
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { rest } from '@/lib/rest'
-import { getPayload } from '@/lib/payload'
 import { useAuth } from '@/providers/auth'
+
+const tabs = ['name', 'description', 'sign', 'summary'] as const
+export type TabKey = 'name' | 'description' | 'sign'
 
 export function useSettingsForm(initialTab: string) {
   const auth = useAuth()
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const tabs = ['name', 'description', 'sign', 'summary']
   const [step, setStep] = useState(1)
   const [activeTab, setActiveTab] = useState(initialTab || 'name')
-  const [formData, setFormData] = useState<Record<string, string>>({})
-  const [completedSteps, setCompletedSteps] = useState<Record<keyof tabs, boolean>>({})
+  const [formData, setFormData] = useState<Partial<Record<TabKey, any>>>({})
+  const [completedSteps, setCompletedSteps] = useState<Record<TabKey, boolean>>(
+    () => Object.fromEntries(tabs.map((name) => [name, false])) as Record<TabKey, boolean>,
+  )
 
   useEffect(() => {
     if (auth.user) {
       const { name, description, sign } = auth.user
       setFormData({ name, description, sign })
+
       setCompletedSteps({
         name: !!name,
         description: !!(description && description.length),
@@ -31,12 +35,12 @@ export function useSettingsForm(initialTab: string) {
 
   useEffect(() => {
     const tab = searchParams.get('t')
-    if (tab && tabs.includes(tab)) {
-      const index = tabs.indexOf(tab)
-      // setStep(index + 1)
-      setActiveTab(tab)
+
+    if (tab && tabs.includes(tab as (typeof tabs)[number])) {
+      // const index = tabs.indexOf(tab as typeof tabs[number]);
+      setActiveTab(tab as (typeof tabs)[number])
     }
-  }, [searchParams, tabs])
+  }, [searchParams])
 
   const handleTabChange = (value: string) => {
     setActiveTab(value)
@@ -72,9 +76,9 @@ export function useSettingsForm(initialTab: string) {
     auth.update({ [key]: value })
   }
 
-  const isStepCompleted = (step: number) => !!completedSteps[step]
+  const isStepCompleted = (step: TabKey) => !!completedSteps[step]
 
-  const setStepCompleted = (step: number, completed = true) => {
+  const setStepCompleted = (step: TabKey, completed = true) => {
     setCompletedSteps((prev) => ({ ...prev, [step]: completed }))
   }
 
