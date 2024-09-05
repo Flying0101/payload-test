@@ -26,7 +26,7 @@ function Header() {
         <div className="flex justify-between items-center py-6">
           {/* Logo Section */}
           <Link href="/" className="flex items-center flex-shrink-0">
-            <Image className="h-20 w-20 mr-2" src="/logo.png" alt="Logo" />
+            <Image className="h-20 w-20 mr-2" src="/logo.png" alt="Logo" width={100} height={100} />
           </Link>
 
           {/* Buttons Section */}
