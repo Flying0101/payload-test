@@ -1,22 +1,55 @@
-import { cn } from '@/lib/utils'
-import * as React from 'react'
-import { InputProps } from './input'
+import React, { useState } from 'react'
+import { FormControl, FormItem, FormLabel, FormMessage } from './form'
+import { Input } from './input'
+import { Eye, EyeOff } from 'lucide-react'
 
-const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+interface PasswordProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string
+  name: string
+  placeholder: string
+  autoComplete: string
+  control: any
+  errors: any
+}
+
+const PasswordInput = React.forwardRef<HTMLInputElement, PasswordProps>(
+  ({ className, type, label, name, placeholder, autoComplete, control, errors, ...props }, ref) => {
+    const [showPassword, setShowPassword] = useState(false)
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword)
+    }
+
     return (
-      <input
-        type={type}
-        className={cn(
-          'flex h-10 w-full rounded-full border-slate-800 border-2 bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-          className,
-        )}
-        ref={ref}
-        {...props}
-      />
+      <FormItem>
+        <FormLabel>{label}</FormLabel>
+        <FormControl>
+          <Input
+            type={showPassword ? 'text' : 'password'}
+            placeholder={placeholder}
+            {...control.register(name)}
+            autoComplete={autoComplete}
+            after={
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                tabIndex={-1}
+                className="focus:outline-none"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4 text-gray-500" />
+                ) : (
+                  <Eye className="h-4 w-4 text-gray-500" />
+                )}
+              </button>
+            }
+          />
+        </FormControl>
+        {errors[name] && <FormMessage>{errors[name].message}</FormMessage>}
+      </FormItem>
     )
   },
 )
+
 PasswordInput.displayName = 'PasswordInput'
 
 export { PasswordInput }
