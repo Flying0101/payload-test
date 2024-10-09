@@ -15,7 +15,7 @@ import {
 import { Input } from '../input'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../card'
-import { TypewriterEffectSmooth } from '../typewriter-effect'
+import { TextGenerateEffect } from '../text-generate-effect'
 
 const NameSchema = z.object({
   name: z.string().min(1).max(160),
@@ -49,7 +49,7 @@ export function NameForm({ formData, updateFormData, nextStep, setStepCompleted 
       console.log('name changed')
       setStepCompleted('name', false)
     }
-  }, [watchName, formData.name, setStepCompleted])
+  }, [watchName, formData.name])
 
   function onSubmit(data: any) {
     updateFormData('name', data.name)
@@ -61,15 +61,7 @@ export function NameForm({ formData, updateFormData, nextStep, setStepCompleted 
     <Card className="w-full">
       <CardHeader>
         <CardTitle>
-          <TypewriterEffectSmooth
-            words={[
-              { text: 'Hello,' },
-              { text: 'what' },
-              { text: 'is' },
-              { text: 'your' },
-              { text: 'Name?', className: 'text-primary' },
-            ]}
-          />
+          <TextGenerateEffect words="Hello, what is your Name?" highlightWords={['Name?']} />
         </CardTitle>
       </CardHeader>
       <Form {...form}>

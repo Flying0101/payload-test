@@ -35,12 +35,7 @@ export function Settings({ initialTab, className, signs, ...props }: SettingsPro
   ]
 
   return (
-    <Tabs
-      defaultValue="name"
-      className="w-[800px]"
-      value={activeTab}
-      onValueChange={handleTabChange}
-    >
+    <Tabs defaultValue="name" className="w-full" value={activeTab} onValueChange={handleTabChange}>
       <VisibleTabs forms={forms} isStepCompleted={isStepCompleted} step={step} />
       {forms.map(({ value, component: FormComponent }) => (
         <TabsContent key={value} value={value}>

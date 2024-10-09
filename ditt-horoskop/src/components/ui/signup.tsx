@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { Eye, EyeOff } from 'lucide-react'
 import { rest } from '@/lib/rest'
 import { useAuth } from '@/providers/auth'
+import { PasswordInput } from './password-input'
 
 const formSchema = z
   .object({
@@ -36,8 +37,6 @@ const formSchema = z
 function SignupForm({ setShowAlert }: { setShowAlert: (value: boolean) => void }) {
   const router = useRouter()
   const { create, login } = useAuth()
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,41 +51,27 @@ function SignupForm({ setShowAlert }: { setShowAlert: (value: boolean) => void }
     setShowAlert(false)
 
     try {
-      console.log('Signup values:', values)
       const res = await create(values)
-
-      console.log(res)
 
       if (res?.id) {
         const loginRes = await login({ email: values.email, password: values.password })
 
         if (loginRes?.id) {
-          console.log('Logged in successfully:', loginRes.id)
-          router.push(`/user/${loginRes.id}/settings`)
+          router.push(`/user/${loginRes.id}/profile`)
         } else {
-          console.error('Login failed after signup')
           setShowAlert(true)
         }
       }
 
       // console.log('Account created:', res)
       // if (res?.id) {
-      //   router.push(`/user/${res.id}/settings`)
+      //   router.push(`/user/${res.id}/profile`)
       // }
 
       // If signup is successful, you might want to automatically log the user in
       // and redirect them to their profile or dashboard
     } catch (error) {
-      console.error('Error creating account:', error)
       setShowAlert(true)
-    }
-  }
-
-  const togglePasswordVisibility = (field: 'password' | 'confirmPassword') => {
-    if (field === 'password') {
-      setShowPassword(!showPassword)
-    } else {
-      setShowConfirmPassword(!showConfirmPassword)
     }
   }
 
@@ -98,7 +83,6 @@ function SignupForm({ setShowAlert }: { setShowAlert: (value: boolean) => void }
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email *</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Enter your email"
@@ -127,69 +111,21 @@ function SignupForm({ setShowAlert }: { setShowAlert: (value: boolean) => void }
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
+        <PasswordInput
+          label="Password *"
           name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password *</FormLabel>
-              <FormControl>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
-                  {...field}
-                  autoComplete="new-password"
-                  after={
-                    <button
-                      type="button"
-                      onClick={() => togglePasswordVisibility('password')}
-                      tabIndex={-1}
-                      className="focus:outline-none"
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4 text-gray-500" />
-                      ) : (
-                        <Eye className="h-4 w-4 text-gray-500" />
-                      )}
-                    </button>
-                  }
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
+          placeholder="Enter your password"
+          autoComplete="new-password"
           control={form.control}
+          errors={form.formState.errors}
+        />
+        <PasswordInput
+          label="Confirm Password *"
           name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password *</FormLabel>
-              <FormControl>
-                <Input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="Confirm your password"
-                  {...field}
-                  autoComplete="new-password"
-                  after={
-                    <button
-                      type="button"
-                      onClick={() => togglePasswordVisibility('confirmPassword')}
-                      tabIndex={-1}
-                      className="focus:outline-none"
-                    >
-                      {showConfirmPassword ? (
-                        <EyeOff className="h-4 w-4 text-gray-500" />
-                      ) : (
-                        <Eye className="h-4 w-4 text-gray-500" />
-                      )}
-                    </button>
-                  }
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          placeholder="Confirm your password"
+          autoComplete="new-password"
+          control={form.control}
+          errors={form.formState.errors}
         />
         <Button type="submit" variant="default" size="full">
           Sign Up

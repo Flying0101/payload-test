@@ -2,11 +2,12 @@
 
 import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../card'
-import { TypewriterEffectSmooth } from '../typewriter-effect'
 import { Media, Sign } from '@/payload-types'
 import SignIcon from '../signIcon'
 import { Circle, CircleMiddle } from '../circle'
 import Image from 'next/image'
+import { TextGenerateEffect } from '../text-generate-effect'
+import { Hover, HoverContent, HoverList, HoverTrigger } from '../hover'
 
 export function SignsForm({
   formData,
@@ -53,67 +54,74 @@ export function SignsForm({
     return 'no'
   }
 
-  const getSelectedSign = () => {
+  const getSelectedSign = (): { words: string; highlightWords: string[] } => {
     if (confirmedSign) {
       const confirmed = signs.find((sign) => sign.id === confirmedSign)
-      return confirmed
-        ? `You have picked`
-            .split(' ')
-            .map((w) => ({ text: w, className: '' }))
-            .toSpliced(4, 0, { text: confirmed.Title, className: 'text-primary' })
-        : 'Pick your Sign'
-            .split(' ')
-            .map((w) => ({ text: w, className: '' }))
-            .toSpliced(2, 0, { text: 'Sign', className: 'text-primary' })
+      if (confirmed) {
+        return { words: `You have picked ${confirmed.Title}`, highlightWords: [confirmed.Title] }
+      }
     }
 
     if (selectedSign) {
       const selected = signs.find((sign) => sign.id === selectedSign)
-      return selected
-        ? `Click on again to confirm your choice`
-            .split(' ')
-            .map((w) => ({ text: w, className: '' }))
-            .toSpliced(2, 0, { text: selected.Title, className: 'text-primary' })
-        : 'Pick your'
-            .split(' ')
-            .map((w) => ({ text: w, className: '' }))
-            .toSpliced(2, 0, { text: 'Sign', className: 'text-primary' })
+      if (selected) {
+        return {
+          words: `Click on ${selected.Title} again to confirm your choice`,
+          highlightWords: [selected.Title],
+        }
+      }
     }
 
-    return 'Pick your'
-      .split(' ')
-      .map((w) => ({ text: w, className: '' }))
-      .toSpliced(2, 0, { text: 'Sign', className: 'text-primary' })
+    return { words: 'Pick your Sign', highlightWords: ['Sign'] }
   }
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="flex justify-center">
-          <TypewriterEffectSmooth words={getSelectedSign()} />
+        <CardTitle className="flex justify-center h-20">
+          <TextGenerateEffect {...getSelectedSign()} />
         </CardTitle>
       </CardHeader>
       <CardContent className="flex justify-center">
-        <Circle radius={250}>
-          {!!hoveredSign && (
-            <CircleMiddle>
-              <Image src={hoveredSign.url || ''} alt="chosen sign icon" width={100} height={100} />
-            </CircleMiddle>
-          )}
-          {signs.map(({ id, Title, 'Small Icon': icon, Description }) => (
-            <SignIcon
-              icon={icon}
-              name={Title}
-              key={id}
-              description={Description}
-              state={getSignState(id)}
-              setHoverImage={(v: false | Media) => {
-                setHoveredSign(v)
-              }}
-              onClick={() => handleSignClick(id)}
-            />
-          ))}
-        </Circle>
+        <Hover>
+          <Circle radius={{ sm: 150, md: 220 }}>
+            {!!hoveredSign && (
+              <CircleMiddle>
+                {signs.map(({ id, Title, 'Small Icon': icon, Description }) => (
+                  <HoverContent value={Title} key={id}>
+                    <div className="space-y-1 flex flex-col items-center">
+                      <Image
+                        className="text-white"
+                        src={(icon as any).url || ''}
+                        style={{ color: 'currentcolor', fill: 'currentColor' }}
+                        alt="chosen sign icon"
+                        width={100}
+                        height={100}
+                      />
+                      <p className="text-sm">{Description}</p>
+                      <div className="flex items-center pt-2">
+                        <span className="text-xs text-muted-foreground">Dec 21 to Jan 53</span>
+                      </div>
+                    </div>
+                  </HoverContent>
+                ))}
+              </CircleMiddle>
+            )}
+            {signs.map(({ id, Title, 'Small Icon': icon, Description }) => (
+              <HoverTrigger value={Title} key={`${id}hover`}>
+                <SignIcon
+                  icon={icon}
+                  key={id}
+                  state={getSignState(id)}
+                  setHoverImage={(v: false | Media) => {
+                    setHoveredSign(v)
+                  }}
+                  onClick={() => handleSignClick(id)}
+                />
+              </HoverTrigger>
+            ))}
+          </Circle>
+        </Hover>
       </CardContent>
     </Card>
   )

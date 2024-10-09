@@ -15,8 +15,8 @@ import {
 } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../card'
-import { TypewriterEffectSmooth } from '../typewriter-effect'
 import { Textarea } from '../textarea'
+import { TextGenerateEffect } from '../text-generate-effect'
 
 const FormSchema = z.object({
   description: z
@@ -61,16 +61,9 @@ export function DescriptionForm({ formData, updateFormData, nextStep, setStepCom
               Hello, {name}!
             </div>
           )}
-          <TypewriterEffectSmooth
-            words={[
-              { text: 'Please' },
-              { text: 'tell' },
-              { text: 'us' },
-              { text: 'a' },
-              { text: 'little' },
-              { text: 'about' },
-              { text: 'yourself', className: 'text-primary' },
-            ]}
+          <TextGenerateEffect
+            words="Please tell us a little about Yourself"
+            highlightWords={['Yourself']}
           />
         </CardTitle>
       </CardHeader>

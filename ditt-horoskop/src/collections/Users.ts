@@ -13,5 +13,6 @@ export const Users: CollectionConfig = {
     { name: 'name', type: 'text' },
     { name: 'description', type: 'text' },
     { name: 'sign', type: 'relationship', relationTo: 'signs' },
+    { name: 'daily', type: 'relationship', relationTo: 'horoscopes' },
   ],
 }

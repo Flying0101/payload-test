@@ -9,6 +9,7 @@ type LayoutProps = {
 import './globals.css'
 import { AuthProvider } from '@/providers/auth'
 import Header from '@/components/ui/header'
+import { ThemeProvider } from '@/providers/theme-provider'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -17,13 +18,23 @@ const fontSans = FontSans({
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <html>
+    <html lang="en" suppressHydrationWarning>
       <AuthProvider>
-        <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
-          <Header />
-          <main className={'w-full flex flex-col justify-center items-center pb-4'}>
-            {children}
-          </main>
+        <body
+          className={cn(
+            'flex flex-col min-h-screen bg-background font-sans antialiased',
+            fontSans.variable,
+          )}
+        >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+            <main className={'flex-grow w-full flex flex-col items-center pb-4'}>{children}</main>
+          </ThemeProvider>
         </body>
       </AuthProvider>
     </html>

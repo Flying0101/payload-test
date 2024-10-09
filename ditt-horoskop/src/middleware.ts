@@ -34,8 +34,8 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url)
     }
 
-    if (missingSettings(user) && url.pathname !== `/user/${user.id}/settings`) {
-      url.pathname = `/user/${user.id}/settings`
+    if (missingSettings(user) && url.pathname !== `/user/${user.id}/profile`) {
+      url.pathname = `/user/${user.id}/profile`
       return NextResponse.redirect(url)
     }
   }

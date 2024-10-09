@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../card'
-import { TypewriterEffectSmooth } from '../typewriter-effect'
 import { cn } from '@/lib/utils'
+import { TextGenerateEffect } from '../text-generate-effect'
 
 export default function Summary({ className, formData, isStepCompleted }: any) {
   const nameIsCompleted = isStepCompleted('name')
@@ -14,17 +14,9 @@ export default function Summary({ className, formData, isStepCompleted }: any) {
       <CardHeader>
         <CardTitle>
           {isCompleted ? (
-            <TypewriterEffectSmooth
-              words={[
-                { text: 'You,' },
-                { text: 'are' },
-                { text: 'now' },
-                { text: 'ready' },
-                { text: 'to' },
-                { text: 'begin' },
-                { text: 'your' },
-                { text: 'Adventure', className: 'text-primary' },
-              ]}
+            <TextGenerateEffect
+              words="You, are now ready to begin your Adventure"
+              highlightWords={['Adventure']}
             />
           ) : (
             <span>Please complete all the steps</span>
@@ -33,7 +25,13 @@ export default function Summary({ className, formData, isStepCompleted }: any) {
       </CardHeader>
       <CardContent>
         {isCompleted ? (
-          <Link href="daily">Click here to read today&apos;s Horoscope</Link>
+          <Link
+            href="."
+            className="group relative inline-flex items-center justify-center px-8 py-3 text-lg font-bold text-white transition-all duration-300 ease-in-out bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full overflow-hidden"
+          >
+            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-500 to-pink-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 ease-in-out"></span>
+            <span className="relative">Read Today&apos;s Horoscope</span>
+          </Link>
         ) : (
           <ul>
             <li>

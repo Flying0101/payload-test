@@ -2,7 +2,7 @@
 
 import { AuthContext, useAuth } from '@/providers/auth'
 import { Avatar, AvatarFallback, AvatarImage } from './avatar'
-import { buttonVariants } from './button'
+import { Button, buttonVariants } from './button'
 import { User } from '@/payload-types'
 import {
   DropdownMenu,
@@ -10,40 +10,38 @@ import {
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
 } from './dropdown-menu'
 import { DropdownMenuItem, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import Link from 'next/link'
 import { missingSettings } from '@/lib/userUtils'
 import Image from 'next/image'
+import { MoonIcon, SunIcon } from 'lucide-react'
+import { useTheme } from 'next-themes'
 
 function Header() {
   const { user, logout } = useAuth()
 
   return (
-    <header>
-      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-6">
-          {/* Logo Section */}
-          <Link href="/" className="flex items-center flex-shrink-0">
-            <Image className="h-20 w-20 mr-2" src="/logo.png" alt="Logo" width={100} height={100} />
-          </Link>
+    <header className="w-full mx-auto p-2 sm:p-4 flex justify-between items-center">
+      {/* Logo Section */}
+      <Link href="/" className="flex items-center flex-shrink-0">
+        <Image className="h-12 w-12 mr-2" src="/logo.png" alt="Logo" width={100} height={100} />
+      </Link>
 
-          {/* Buttons Section */}
-          <div className="hidden md:flex space-x-4">
-            <SignUpButton user={user} />
-            <UserMenu user={user} logout={logout} />
-            <LoginButton user={user} />
-          </div>
-        </div>
+      {/* Buttons Section */}
+      <div className="flex md:flex space-x-4">
+        <SignUpButton user={user} />
+        <UserMenu user={user} logout={logout} />
+        <LoginButton user={user} />
+        <span className="hidden md:flex">
+          <ModeToggle />
+        </span>
       </div>
     </header>
   )
 }
 
 function UserMenu({ user, logout }: Pick<AuthContext, 'user' | 'logout'>) {
-  console.log('rerender header', user)
-
   if (!user?.email) return null
   if (missingSettings(user)) return null
 
@@ -58,39 +56,22 @@ function UserMenu({ user, logout }: Pick<AuthContext, 'user' | 'logout'>) {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account ({email})</DropdownMenuLabel>
+        <DropdownMenuLabel>{name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href={`${id}/daily`}>
-            <DropdownMenuItem>
-              Daily Horoscope
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
+          <Link href={`/user/${id}`}>
+            <DropdownMenuItem>Your Daily Horoscope</DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>
-            Weekly Horoscope
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Monthly Horoscope
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            <Link href={`/user/${id}/profile`}>Profile</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" onClick={logout}>
           Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -118,3 +99,24 @@ function SignUpButton({ user }: { user: User | null | undefined }) {
 }
 
 export default Header
+
+export function ModeToggle() {
+  const { setTheme } = useTheme()
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon">
+          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('system')}>System</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}

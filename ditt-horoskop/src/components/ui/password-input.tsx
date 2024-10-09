@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FormControl, FormItem, FormLabel, FormMessage } from './form'
+import { FormControl, FormItem, FormMessage } from './form'
 import { Input } from './input'
 import { Eye, EyeOff } from 'lucide-react'
 
@@ -21,7 +21,6 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordProps>(
 
     return (
       <FormItem>
-        <FormLabel>{label}</FormLabel>
         <FormControl>
           <Input
             type={showPassword ? 'text' : 'password'}
