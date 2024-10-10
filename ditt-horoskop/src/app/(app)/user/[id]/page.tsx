@@ -7,10 +7,6 @@ import * as runtime from 'react/jsx-runtime'
 
 export const revalidate = 86400 // revalidate once a day
 
-const ClientComponent = ({ children }: { children: React.ReactNode }) => {
-  return <div className="bg-gray-100 p-4 rounded-lg shadow-md">{children}</div>
-}
-
 export async function generateStaticParams() {
   const payload = await getPayload()
   const users = await payload.find({ collection: 'users' })
