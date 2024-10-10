@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
-export default function Loader() {
+export default function Loader({ text }: { text: string }) {
   const [gradientAngle, setGradientAngle] = useState(0)
 
   useEffect(() => {
@@ -133,8 +133,7 @@ export default function Loader() {
             </defs>
             <text fill="url(#shifting-gradient)" fontSize="24" letterSpacing="2">
               <textPath href="#circle" startOffset="0%">
-                GENERATING HOROSCOPE •••••••••• GENERATING HOROSCOPE •••••••••• GENERATING HOROSCOPE
-                ••••••••••{' '}
+                {text}•••••••••• {text} •••••••••• {text} ••••••••••{' '}
               </textPath>
             </text>
           </svg>
