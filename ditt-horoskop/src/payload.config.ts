@@ -36,10 +36,11 @@ export default buildConfig({
     },
   }),
   sharp,
-  cors: ['http://localhost:3000'],
+  cors: ['http://localhost:3000', 'https://mitt-horoskop.vercel.app'],
   csrf: [
     // whitelist of domains to allow cookie auth from
     'http://localhost:3000',
+    'https://mitt-horoskop.vercel.app',
   ],
   plugins: [
     // storage-adapter-placeholder
